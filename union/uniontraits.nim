@@ -91,9 +91,9 @@ func getUnionType*(n: NimNode): UnionTy =
     if typ.inherits.sameType(bindSym"Union"):
       UnionTy(typ)
     else:
-      nil
+      UnionTy(nil)
   else:
-    nil
+    UnionTy(nil)
 
 func isUnionTy*(n: NimNode): bool =
   ## Returns whether `n` type is an Union.
