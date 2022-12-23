@@ -116,7 +116,7 @@ func hash*(n: NimNode): Hash =
   ## Hash a NimNode using its representation
   hash(repr n)
 
-func multiReplace*(n: NimNode, replacements: varargs[tuple[orig, replace: NimNode]]): NimNode =
+proc multiReplace*(n: NimNode, replacements: varargs[tuple[orig, replace: NimNode]]): NimNode =
   ## Produce a copy of `n` with occurrances of `orig` replaced with copies of
   ## `replace`.
   # Convert our list into a table for more efficient lookup.
@@ -136,7 +136,7 @@ func desym*(n: NimNode): NimNode =
   result = ident repr(n)
   result.copyLineInfo(n)
 
-func applyLineInfo*(n, info: NimNode): NimNode =
+proc applyLineInfo*(n, info: NimNode): NimNode =
   ## Produce a copy of `n` with line information from `info` applied to it and
   ## its children.
   n.filter do (n: NimNode) -> NimNode:

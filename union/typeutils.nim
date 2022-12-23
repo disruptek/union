@@ -18,7 +18,7 @@ const
   SkippableInst* = {ntyTypeDesc}
     ## Type kinds that can be skipped by getTypeSkipInst
 
-func getTypeSkip*(n: NimNode, skip = Skippable): NimNode =
+proc getTypeSkip*(n: NimNode, skip = Skippable): NimNode =
   ## Obtain the type of `n`, while skipping through type kinds matching `skip`.
   ##
   ## See `Skippable` for supported type kinds.
@@ -33,7 +33,7 @@ func getTypeSkip*(n: NimNode, skip = Skippable): NimNode =
     else:
       discard "return as is"
 
-func getTypeInstSkip*(n: NimNode, skip = SkippableInst): NimNode =
+proc getTypeInstSkip*(n: NimNode, skip = SkippableInst): NimNode =
   ## Obtain the type instantiation of `n`, while skipping through type kinds matching `skip`.
   ##
   ## See `SkippableInst` for supported type kinds.
@@ -46,7 +46,7 @@ func getTypeInstSkip*(n: NimNode, skip = SkippableInst): NimNode =
     else:
       discard "return as is"
 
-func getTypeImplSkip*(n: NimNode, skip = Skippable): NimNode =
+proc getTypeImplSkip*(n: NimNode, skip = Skippable): NimNode =
   ## Obtain the type implementation of `n`, while skipping through type kinds matching `skip`.
   result = getTypeImpl:
     getTypeSkip(n, skip)
@@ -62,9 +62,11 @@ func sameType*(a, b: NimNode): bool =
   ## * https://github.com/nim-lang/Nim/issues/18867
   ##
   ## * https://github.com/nim-lang/Nim/issues/19072
-  {.warning: "compiler bug workaround; see https://github.com/nim-lang/Nim/issues/18867".}
+
+  # XXX: compiler bug workaround; see https://github.com/nim-lang/Nim/issues/18867
   if macros.sameType(a, b) or macros.sameType(b, a):
-    {.warning: "compiler bug workaround; see https://github.com/nim-lang/Nim/issues/19072".}
+    # XXX: compiler bug workaround; see https://github.com/nim-lang/Nim/issues/19072
+
     # In case the types are generic parmeters
     if a.typeKind == ntyGenericParam and b.typeKind == ntyGenericParam:
       # The result will be whether they are the same symbol. This is due to
