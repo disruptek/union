@@ -231,7 +231,7 @@ proc add(o: OrTy, u: UnionTy) =
   for _, _, typ in u.variants:
     o.add copy(typ)
 
-func unionsUnpacked(o: OrTy): OrTy =
+proc unionsUnpacked(o: OrTy): OrTy =
   ## Produce a version of `o` with all `union` types unpacked
   result = OrTy copyNimNode(o)
   result.add o[0]
@@ -293,7 +293,7 @@ func unionTypeName(o: OrTy): string =
   # Render it
   result = repr(node)
 
-func sorted(o: OrTy): OrTy =
+proc sorted(o: OrTy): OrTy =
   ## Sorts the types in `o` in a reasonable manner.
   ##
   ## This will dictate the ABI of the union produced from `o`.

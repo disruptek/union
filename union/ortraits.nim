@@ -66,12 +66,12 @@ proc add*(o: OrTy, an: openArray[NimNode]) =
   for n in an.items:
     o.add n
 
-func add*(o: OrTy, n: OrTy) =
+proc add*(o: OrTy, n: OrTy) =
   ## Add all instantiation of types in `n` to `o` without creating duplicates.
   for typ in n.types:
     o.add copy(typ)
 
-func getOrType*(n: NimNode): OrTy =
+proc getOrType*(n: NimNode): OrTy =
   ## Get `OrTy` from node `n`.
   ##
   ## Returns `nil` if `n` is not a typeclass.

@@ -81,7 +81,7 @@ func newUnionType*(enumType: NimNode): UnionTy =
       )
     )
 
-func getUnionType*(n: NimNode): UnionTy =
+proc getUnionType*(n: NimNode): UnionTy =
   ## Get the Union type of node `n`.
   ##
   ## Returns `nil` if `n` is not an union.
@@ -95,7 +95,7 @@ func getUnionType*(n: NimNode): UnionTy =
   else:
     UnionTy(nil)
 
-func isUnionTy*(n: NimNode): bool =
+proc isUnionTy*(n: NimNode): bool =
   ## Returns whether `n` type is an Union.
   ##
   ## Outside of macros, `x is Union` can be used to match for Union type.
