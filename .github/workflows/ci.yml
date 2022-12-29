@@ -32,7 +32,9 @@ jobs:
         run: nimble install -y --depsOnly
 
       - name: Run tests
-        run: nimble test
+        run: |
+          nimble install -y "https://github.com/disruptek/balls > 3.9.0 & < 4.0.0"
+          nimble test
 
       - name: Build docs
         shell: bash
