@@ -16,14 +16,14 @@
 ##
 ## There are several limitations at the moment:
 ##
-## - Conversion between a value and an union has to be done via the `as`
+## - Conversion between a value and a union has to be done via the `as`
 ##   operator. There is limited implicit conversion support via the use of the
 ##   `convertible` macro.
 ## - The ABI of the union object is unstable due to a lack of a deterministic
 ##   ordering system. This means a ``union(T | U)`` sent as binary from program
-##   A might differs from ``union(T | U)`` in receiving program B.
-## - Very limited generics support. This module can only process generics if at the
-##   time of instantiation the generic parameter is resolved to a type.
+##   A might differ from ``union(T | U)`` in receiving program B.
+## - Very limited generics support. This module can only process generics if
+##   the generic parameter is resolved to a type at the time of instantiation.
 
 runnableExamples:
   type None = object
@@ -93,7 +93,7 @@ proc infix(a, op, b: NimNode): NimNode =
   nnkInfix.newTree(op, a, b)
 
 macro `of`*[U: Union](x: U, T: typedesc): bool =
-  ## Returns whether the union `x` is having a value of type `T`
+  ## Returns whether the union `x` has a value of type `T`
   let
     union = getUnionType(x)
     # Get the user's type from T
@@ -102,14 +102,14 @@ macro `of`*[U: Union](x: U, T: typedesc): bool =
   let variant = union.getVariant(T)
   # If a variant with user's type exist
   if variant.isSome:
-    # Return a discrimiator comparision
+    # Return a discriminator comparision
     result = infix(newCall(bindSym"currentType", x), bindSym"==", variant.get.enm)
   else:
     # $ is used for `U` because it's a typedesc (the value not the node) in this context
     error "type <" & repr(T) & "> is not a part of <" & $U & ">", T
 
 macro `of`*[U, V: Union](x: U, T: typedesc[V]): bool =
-  ## Returns whether the union `x` is having a value convertible to union `T`
+  ## Returns whether the union `x` has a value convertible to union `T`
   let
     union = x.getUnionType()
     T = T.getUnionType()
@@ -145,7 +145,7 @@ macro `as`*(x: typed, U: typedesc[Union]): untyped =
 
     result = nnkObjConstr.newTree [
       U,
-      # Initialize the discrimiator value
+      # Initialize the discriminator value
       nnkExprColonExpr.newTree(copy union.typeField, copy enm),
       # Initialize the data field with `x`'s data
       nnkExprColonExpr.newTree(copy field, x)
@@ -220,7 +220,7 @@ macro `as`*[U, V: Union](x: U, T: typedesc[V]): untyped =
       error "values of type <" & $U & "> is not convertible to <" & $V & ">", x
 
 proc add(o: OrTy, n: NimNode) =
-  ## Add type `n` into `o` without creating duplicates, also unwrap typedesc
+  ## Add type `n` into `o` without creating duplicates; also unwrap typedesc
   if n.typeKind == ntyTypeDesc:
     o.add getTypeInstSkip(n)
   elif n notin o:
@@ -413,7 +413,7 @@ proc unionize(T, info: NimNode): NimNode =
     instantiation.add copy(surrogateType)
     # Add the generic parameters
     for param in genericParams:
-      # The compiler freaks out if we straight up use the parameter symbol,
+      # The compiler freaks out if we straight-up use the parameter symbol,
       # so desym it.
       instantiation.add desym(param)
 
