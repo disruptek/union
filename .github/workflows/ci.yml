@@ -34,7 +34,7 @@ jobs:
       - name: Run tests
         run: |
           nimble install -y "https://github.com/disruptek/balls"
-          nimble test
+          nimble --verbose test
 
       - name: Build docs
         shell: bash
